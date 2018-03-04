@@ -1,7 +1,6 @@
-<html>
+ï»¿<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1" /> 
-<meta charset="ISO-8859-1" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" /> 
 
 <style>
 table,th, td {
@@ -89,7 +88,7 @@ var a, b, mode, op;
 		case "a_fix":
 			if (isNaN(parseInt(document.multi.a_fix.value)))
 			{
-				alert("Has d'escriure un número com a multiplicant");
+				alert("Has d'escriure un nÃºmero com a multiplicant");
 				//No hi ha break deliveradament
 			}
 			else
@@ -218,17 +217,17 @@ function ValidaMultiplicacioText(a, b, op, m)
 {
 /*	if (isNaN(parseInt(a)))
 	{
-		alert("A és un NaN");
+		alert("A Ã©s un NaN");
 		return;
 	}
 	if (isNaN(parseInt(b)))
 	{
-		alert("B és un NaN");
+		alert("B Ã©s un NaN");
 		return;
 	}*/
 	if (isNaN(parseInt(m)))
 	{
-		alert("Has d'escriure un número com a resultat");
+		alert("Has d'escriure un nÃºmero com a resultat");
 		document.multi.m.value="";
 		document.getElementById("m").focus();
 		return;
@@ -297,7 +296,7 @@ var r;
 	}
 	else if (r<0.67)
 	{
-		document.getElementById("aa").innerHTML="Taula de pitàgoras";
+		document.getElementById("aa").innerHTML="Taula de pitÃ goras";
 		document.getElementById("taula").innerHTML=DibuixaTaulaPitagoras(Op=="x"?A:A/B,B);
 	}
 	else
@@ -363,19 +362,19 @@ var s, mm=0;
 </script>
 </head>
 <body onLoad="IniciaPlana();">
-<h2>Aprèn les taules multiplicar</h2>
+<h2>AprÃ¨n les taules multiplicar</h2>
 <form name="multi" onSubmit="return ValidaMultiplicacioForm();">
 <table width="400px" style="border: 0px;">
 <tr><td style="text-align:left;vertical-align:text-top;border: 0px;">
 <b>Nivell:</b><br>
 <input id="nivell-a-fix" name="nivell" type="radio" value="a_fix"><label for="nivell-a-fix"> taula del <input name="a_fix" size="1" maxlength="1" onfocus="document.multi.nivell[0].checked=true;" onInput="document.multi.nivell[0].checked=true;IniciaMultiplicacio();" /></label><br>
-<input id="nivell-0" name="nivell" type="radio" value="0" onChange="IniciaMultiplicacio()"><label for="nivell-0" /> fàcil</label><br>
+<input id="nivell-0" name="nivell" type="radio" value="0" onChange="IniciaMultiplicacio()"><label for="nivell-0" /> fÃ cil</label><br>
 <input id="nivell-1" name="nivell" type="radio" value="1" onChange="IniciaMultiplicacio()" checked="checked" /><label for="nivell-1"> intermedi</label><br>
-<input id="nivell-2" name="nivell" type="radio" value="2" onChange="IniciaMultiplicacio()"><label for="nivell-2" /> difícil</label> 
+<input id="nivell-2" name="nivell" type="radio" value="2" onChange="IniciaMultiplicacio()"><label for="nivell-2" /> difÃ­cil</label> 
 </td><td style="text-align:left;vertical-align:text-top;border: 0px;">
-<b>Operació:</b><br>
-<input id="operacio-multiplicacio" name="operacio" type="radio" value="multiplicacio" onChange="IniciaMultiplicacio()" checked="checked" /><label for="operacio-multiplicacio"> multiplicació</label><br>
-<input id="operacio-divisio" name="operacio" type="radio" value="divisio" onChange="IniciaMultiplicacio()" /><label for="operacio-divisio"> divisió</label><br>
+<b>OperaciÃ³:</b><br>
+<input id="operacio-multiplicacio" name="operacio" type="radio" value="multiplicacio" onChange="IniciaMultiplicacio()" checked="checked" /><label for="operacio-multiplicacio"> multiplicaciÃ³</label><br>
+<input id="operacio-divisio" name="operacio" type="radio" value="divisio" onChange="IniciaMultiplicacio()" /><label for="operacio-divisio"> divisiÃ³</label><br>
 </td></tr></table>
 <br>
 <div class="operacio">
@@ -386,7 +385,7 @@ var s, mm=0;
 Darrer resultat: <span id="nota"></span><br>
 Punts acumulats: <b><span id="punts"></span></b><br>
 Correctes: <b><font color="green"><span id="correctes"></span></font></b>, Incorrectes <b><font color="red"><span id="incorrectes"></span></font></b><br>
-Temps esmerçat: <b><span id="temps"></span></b><br>
+Temps esmerÃ§at: <b><span id="temps"></span></b><br>
 </form>
 <h3><span id="aa"></span></h3>
 <span id="taula"></span>

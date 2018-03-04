@@ -1,7 +1,6 @@
-<html>
+ï»¿<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1"/> 
-<meta charset="ISO-8859-1" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/> 
 
 <style>
 table,th, td {
@@ -57,12 +56,12 @@ function DibuixaMultiplicacioText(b, v)
 {
 	if (isNaN(parseInt(b)))
 	{
-		alert("Has d'escriure un número com a multiplicant");
+		alert("Has d'escriure un nÃºmero com a multiplicant");
 		return;
 	}
 	if (isNaN(parseFloat(v)))
 	{
-		alert("Has d'escriure un número com a nombre de segons");
+		alert("Has d'escriure un nÃºmero com a nombre de segons");
 		return;
 	}
 	DibuixaMultiplicacio(parseInt(b), parseFloat(v));
@@ -95,12 +94,12 @@ function DibuixaMultiplicacio(b, v)
 </script>
 </head>
 <body onLoad="IniciaPlana();">
-<h2>Aprèn les taules multiplicar (taules)</h2>
+<h2>AprÃ¨n les taules multiplicar (taules)</h2>
 <form name=multi onSubmit="return DibuixaMultiplicacioForm();">
 Taula del: <input name="b" id="b" size="1" maxlength="1" class="operacio" value="9"><br>
 Velocitat: <input name="v" id="v" size="3" maxlength="3" value="2.0"> <input type=submit value="Dibuixa">
 </form> 
-Temps esmerçat: <b><span id="temps"></span></b><br>
+Temps esmerÃ§at: <b><span id="temps"></span></b><br>
 
 <span id="taula" style="font-size: 20px;"></span>
 </body>
