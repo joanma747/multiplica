@@ -1,0 +1,389 @@
+<html>
+
+<style>
+table,th, td {
+	border-collapse: collapse;
+	border: 1px solid black;
+	text-align: right;        
+}
+
+body {
+	font-family: Arial, "Sans-serif";
+}
+
+div.operacio {
+	font-size: 30px;
+}
+
+input.operacio {
+	font-size: 30px;
+}
+
+</style>
+
+<script>
+var Puntuacio=0, Incorrectes=0, Correctes=0, Puntuaciomax=-2, A, B, Op, Voltes=0;
+var audio_correcte;
+var audio_incorrecte;
+var inici, inici_item;
+
+function IniciaPlana()
+{
+	audio_correcte=new Audio("tada.mp3");
+	audio_incorrecte=new Audio("chord.mp3");
+	inici=new Date();
+	IniciaMultiplicacio();
+	ActualitzaRellotge();
+}
+
+var Fet=false;
+function ActualitzaRellotge()
+{
+var fi=new Date(), d, h, m, s, ht, mt, st;
+
+	d=parseInt((fi.getTime()-inici_item.getTime())/1000);
+	m=parseInt(d/60);
+	s=d%60;
+	h=parseInt(m/60);
+	m=m%60;
+	d=parseInt((fi.getTime()-inici.getTime())/1000)
+	mt=parseInt(d/60);
+	st=d%60;
+	ht=parseInt(mt/60);
+	mt=mt%60;
+
+	document.getElementById("temps").innerHTML= h+":"+(m<10?"0":"")+m+":"+(s<10?"0":"")+s + "/"+ ht+":"+(mt<10?"0":"")+mt+":"+(st<10?"0":"")+st;
+
+	if (d>16 && !Fet)
+	{
+		document.getElementById("nota").innerHTML="<b><font color=red>Ha passat molt de temps!</font></b>. <i>Resto un punt</i>";
+		audio_incorrecte.play();
+		Puntuacio--;
+		DibuixaPuntuacio();
+		Fet=true;
+	}
+	if (d<16 && Fet)
+		Fet=false;
+
+	setTimeout("ActualitzaRellotge();", 1000);
+}
+
+function IniciaMultiplicacio()
+{
+var a, b, mode, op;
+
+	for (n=0; n<document.multi.nivell.length; n++)
+	{
+		if (document.multi.nivell[n].checked)
+		{
+			mode=document.multi.nivell[n].value;
+			break;
+		}
+	}
+
+	switch (mode)
+	{
+		case "a_fix":
+			if (isNaN(parseInt(document.multi.a_fix.value)))
+			{
+				alert("Has d'escriure un número com a multiplicant");
+				//No hi ha break deliveradament
+			}
+			else
+			{
+				b=document.multi.a_fix.value;
+				do
+				{
+					switch (Voltes%3)
+					{
+						case 0:
+							a=Math.floor(Math.random()*10);
+							break;
+						case 1:
+							a=Math.floor(Math.random()*7+3);
+							break;
+						case 2:
+							a=Math.floor(Math.random()*6+4);
+							break;
+					}		
+					Voltes++;
+				}while (a==(Op=="x" ? A : A/B));
+				break;
+			}			
+		case "0":
+			do {
+				switch (Voltes%3)
+				{
+					case 0:
+						a=Math.floor(Math.random()*5);
+						b=Math.floor(Math.random()*5);
+						break;
+					case 1:
+						a=Math.floor(Math.random()*6);
+						b=Math.floor(Math.random()*8);
+						break;
+					case 2:
+						a=Math.floor(Math.random()*7);
+						b=Math.floor(Math.random()*9);
+						break;
+				}		
+				Voltes++;
+			}while (a==(Op=="x" ? A : A/B) && b==B);
+			break;
+		case "1":
+		default:
+			a=Math.floor(Math.random()*10);
+			b=Math.floor(Math.random()*10);
+			Voltes++;
+			break;
+		case "2":
+			do {
+				switch (Voltes%3)
+				{
+					case 0:
+						a=Math.floor(Math.random()*10);
+						b=Math.floor(Math.random()*10);
+						break;
+					case 1:
+						a=Math.floor(Math.random()*8+2);
+						b=Math.floor(Math.random()*7+3);
+						break;
+					case 2:
+						a=Math.floor(Math.random()*7+3);
+						b=Math.floor(Math.random()*6+4);
+						break;
+				}		
+				Voltes++;
+			}while (a==(Op=="x" ? A : A/B) && b==B);
+			break;
+	}
+
+	B=b;
+
+	for (n=0; n<document.multi.operacio.length; n++)
+	{
+		if (document.multi.operacio[n].checked)
+		{
+			op=document.multi.operacio[n].value;
+			break;
+		}
+	}
+	switch (op)
+	{
+		case "multiplicacio":
+		default:
+			Op="x";
+			A=a
+			break;
+		case "divisio":
+			Op=":";
+			A=a*b
+			break;
+	}
+
+	Puntuaciomax=Puntuaciomax+2;
+	document.getElementById("aa").innerHTML="";
+	document.getElementById("taula").innerHTML="";
+	document.multi.m.value="";
+	inici_item=new Date();
+	DibuixaMultiplicacio();
+}
+
+function DibuixaPuntuacio()
+{
+	document.getElementById("punts").innerHTML=Puntuacio+"/"+(Puntuaciomax)+" ("+((Puntuaciomax==0 || Puntuacio<0) ? 0 : parseInt(Puntuacio/Puntuaciomax*1000)/10)+"%)";
+	document.getElementById("correctes").innerHTML=Correctes;
+	document.getElementById("incorrectes").innerHTML=Incorrectes;
+}
+
+function DibuixaMultiplicacio()
+{
+	DibuixaPuntuacio();
+	document.getElementById("a").innerHTML=A;
+	document.getElementById("b").innerHTML=B;
+	document.getElementById("op").innerHTML=Op;
+	document.getElementById("m").focus();
+}
+
+function ValidaMultiplicacioForm()
+{
+	ValidaMultiplicacioText(A, B, Op, document.multi.m.value);
+	return false;
+}
+
+function ValidaMultiplicacioText(a, b, op, m)
+{
+/*	if (isNaN(parseInt(a)))
+	{
+		alert("A és un NaN");
+		return;
+	}
+	if (isNaN(parseInt(b)))
+	{
+		alert("B és un NaN");
+		return;
+	}*/
+	if (isNaN(parseInt(m)))
+	{
+		alert("Has d'escriure un número com a resultat");
+		document.multi.m.value="";
+		document.getElementById("m").focus();
+		return;
+	}
+	if (Op=="x")
+	{
+		if (0!=ValidaMultiplicacio(parseInt(a), parseInt(b), parseInt(m)))
+		{
+			document.getElementById("nota").innerHTML="<b><font color=red>Incorrecte. " + A + " x " + B + " = "+A*B+"</font></b>. <i>Resto un punt</i>";
+			audio_incorrecte.play();	
+			Puntuacio--;
+			Incorrectes++;
+		}
+		else
+		{
+			document.getElementById("nota").innerHTML="<b><font color=green>CORRECTE!!</font></b> " + A + " x " + B + " = "+A*B+". <i>Guanyes 2 punts</i>";
+			audio_correcte.play();
+			Puntuacio=Puntuacio+2;
+			Correctes++;
+		}
+	}
+	else //if (Op==":")
+	{
+		if (0!=ValidaDivisio(parseInt(a), parseInt(b), parseInt(m)))
+		{
+			document.getElementById("nota").innerHTML="<b><font color=red>Incorrecte. " + A + " : " + B + " = "+A/B+"</font></b>. <i>Resto un punt</i>";
+			audio_incorrecte.play();	
+			Puntuacio--;
+			Incorrectes++;
+		}
+		else
+		{
+			document.getElementById("nota").innerHTML="<b><font color=green>CORRECTE!!</font></b> " + A + " : " + B + " = "+A/B+". <i>Guanyes 2 punts</i>";
+			audio_correcte.play();
+			Puntuacio=Puntuacio+2;
+			Correctes++;
+		}
+	}
+
+	IniciaMultiplicacio();
+	return;
+}
+
+//retorna 0 si a*b dona m
+function ValidaMultiplicacio(a, b, m)
+{
+	return a*b-m;	
+}
+
+function ValidaDivisio(a, b, m)
+{
+	return a/b-m;	
+}
+
+function DibuixaTaulaMultiplicarForm()
+{
+var r;
+	document.getElementById("nota").innerHTML="Ajuda solicidata. <i>Resto un punt</i>";
+	Puntuacio--;
+	DibuixaMultiplicacio();
+	r=Math.random();
+	if (r<0.33)
+	{
+		document.getElementById("aa").innerHTML="Taula del "+(Op=="x"?A:A/B);
+		document.getElementById("taula").innerHTML=DibuixaTaulaMultiplicar(Op=="x"?A:A/B);
+	}
+	else if (r<0.67)
+	{
+		document.getElementById("aa").innerHTML="Taula de pitàgoras";
+		document.getElementById("taula").innerHTML=DibuixaTaulaPitagoras(Op=="x"?A:A/B,B);
+	}
+	else
+	{
+		document.getElementById("aa").innerHTML="Area de "+(Op=="x"?A:A/B)+" x "+B;
+		document.getElementById("taula").innerHTML=DibuixaArea(Op=="x"?A:A/B,B);
+	}
+}
+
+function DibuixaTaulaMultiplicar(a)
+{
+var s="";
+	for (b=0;b<11;b++)
+	{
+		s += a + " x " + b + " = " + a*b + "<br>";
+	}
+	return s;
+}
+
+function DibuixaTaulaPitagoras(a, b)
+{
+var s;
+
+	s="<TABLE><tr><td>&nbsp;</td>";
+	for (var bb=1;bb<11;bb++)
+	{
+		s+="<td"+(bb==b ? " style=\"background-color:#00FF00\"":"")+">" + bb +"</td>";
+	}
+	s+="</tr>";
+
+	for (var aa=1;aa<11;aa++)
+	{
+		s+="<tr><td"+(aa==a ? " style=\"background-color:#00FF00\"":"")+">"+aa+"</td>";
+		for (var bb=1;bb<11;bb++)
+		{
+			s+="<td"+(bb==b || aa==a ? " style=\"background-color:#00FF00\"":"")+">" + aa*bb + "</td>";
+		}
+		s+="</tr>";
+	}
+	s+="</TABLE>";
+	return s;
+}
+
+function DibuixaArea(a, b)
+{
+var s, mm=0;
+
+	s="<TABLE>";
+	for (var aa=0;aa<a;aa++)
+	{
+		s+="<tr>";
+		for (var bb=0;bb<b;bb++, mm++)
+		{
+			s+="<td"+(aa*b+bb+1==(a*b) ? " style=\"background-color:#00FF00\"":"")+">" + (aa*b+bb+1) + "</td>";
+		}
+		s+="</tr>";
+	}
+	s+="</TABLE>";
+	return s;
+}
+
+
+</script>
+<body onLoad="IniciaPlana();">
+<h2>Aprèn les taules multiplicar</h2>
+<form name="multi" onSubmit="return ValidaMultiplicacioForm();">
+<table width="400px" style="border: 0px;">
+<tr><td style="text-align:left;vertical-align:text-top;border: 0px;">
+<b>Nivell:</b><br>
+<input id="nivell-a-fix" name="nivell" type="radio" value="a_fix"><label for="nivell-a-fix"> taula del <input name="a_fix" size="1" maxlength="1" onfocus="document.multi.nivell[0].checked=true;" onInput="document.multi.nivell[0].checked=true;IniciaMultiplicacio();" /></label><br>
+<input id="nivell-0" name="nivell" type="radio" value="0" onChange="IniciaMultiplicacio()"><label for="nivell-0" /> fàcil</label><br>
+<input id="nivell-1" name="nivell" type="radio" value="1" onChange="IniciaMultiplicacio()" checked="checked" /><label for="nivell-1"> intermedi</label><br>
+<input id="nivell-2" name="nivell" type="radio" value="2" onChange="IniciaMultiplicacio()"><label for="nivell-2" /> difícil</label> 
+</td><td style="text-align:left;vertical-align:text-top;border: 0px;">
+<b>Operació:</b><br>
+<input id="operacio-multiplicacio" name="operacio" type="radio" value="multiplicacio" onChange="IniciaMultiplicacio()" checked="checked" /><label for="operacio-multiplicacio"> multiplicació</label><br>
+<input id="operacio-divisio" name="operacio" type="radio" value="divisio" onChange="IniciaMultiplicacio()" /><label for="operacio-divisio"> divisió</label><br>
+</td></tr></table>
+<br>
+<div class="operacio">
+<span id="a"></span> <span id="op">x</span> <span id="b"></span> = <input name="m" id="m" size="2" maxlength="2" class="operacio"> ?
+</div>
+<input type=submit value="Accepta"> <input type=button value="Ajuda" onClick="DibuixaTaulaMultiplicarForm();">
+<br><br>
+Darrer resultat: <span id="nota"></span><br>
+Punts acumulats: <b><span id="punts"></span></b><br>
+Correctes: <b><font color="green"><span id="correctes"></span></font></b>, Incorrectes <b><font color="red"><span id="incorrectes"></span></font></b><br>
+Temps esmerçat: <b><span id="temps"></span></b><br>
+</form>
+<h3><span id="aa"></span></h3>
+<span id="taula"></span>
+</html>

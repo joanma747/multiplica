@@ -1,0 +1,103 @@
+<html>
+
+<style>
+table,th, td {
+	border-collapse: collapse;
+	border: 1px solid black;
+	text-align: right;        
+}
+
+body {
+	font-family: Arial, "Sans-serif";
+}
+
+div.operacio {
+	font-size: 30px;
+}
+
+input.operacio {
+	font-size: 30px;
+}
+
+</style>
+
+<script>
+var inici;
+
+function IniciaPlana()
+{
+	inici=new Date();
+	ActualitzaRellotge();
+}
+
+function ActualitzaRellotge()
+{
+var fi=new Date(), d, h, m, s;
+
+	d=parseInt((fi.getTime()-inici.getTime())/1000);
+	m=parseInt(d/60);
+	s=d%60;
+	h=parseInt(m/60);
+	m=m%60;
+
+	document.getElementById("temps").innerHTML=h+":"+(m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+	setTimeout("ActualitzaRellotge();", 1000);
+}
+
+function DibuixaMultiplicacioForm()
+{
+	DibuixaMultiplicacioText(document.multi.b.value, document.multi.v.value);
+	return false;
+}
+
+function DibuixaMultiplicacioText(b, v)
+{
+	if (isNaN(parseInt(b)))
+	{
+		alert("Has d'escriure un número com a multiplicant");
+		return;
+	}
+	if (isNaN(parseFloat(v)))
+	{
+		alert("Has d'escriure un número com a nombre de segons");
+		return;
+	}
+	DibuixaMultiplicacio(parseInt(b), parseFloat(v));
+	return;
+}
+
+var to=null;
+
+function AfegeixMultiplicacioAText(a, b, v)
+{
+	to=null
+	if (a!=0)
+		document.getElementById("taula").innerHTML+=a*b+"<br>";
+	a++;
+	if (a<=10)
+	{
+		document.getElementById("taula").innerHTML+=b + " x " + a + " = ";
+		to=setTimeout("AfegeixMultiplicacioAText("+a+","+b+","+v+");", v*1000);
+	}
+}
+
+function DibuixaMultiplicacio(b, v)
+{
+	if (to)
+		clearTimeout(to)
+	document.getElementById("taula").innerHTML="";
+	AfegeixMultiplicacioAText(0, b, v);
+}
+
+</script>
+<body onLoad="IniciaPlana();">
+<h2>Aprèn les taules multiplicar (taules)</h2>
+<form name=multi onSubmit="return DibuixaMultiplicacioForm();">
+Taula del: <input name="b" id="b" size="1" maxlength="1" class="operacio" value="9"><br>
+Velocitat: <input name="v" id="v" size="3" maxlength="3" value="2.0"> <input type=submit value="Dibuixa">
+</form> 
+Temps esmerçat: <b><span id="temps"></span></b><br>
+
+<span id="taula" style="font-size: 20px;"></span>
+</body>
+</html>
